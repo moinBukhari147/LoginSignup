@@ -1,12 +1,13 @@
 
 const COMMON = {
   SPLASH: 'splash',
+  HOME: 'home',
+  PROFILE: 'profile',
+
 };
 
 const AUTH = {
-  HOME: 'home',
   LOGIN: 'login',
   SIGNUP: 'signup',
 };
-
 export { COMMON, AUTH };

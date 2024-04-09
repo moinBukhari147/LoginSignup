@@ -9,23 +9,81 @@ import {
     TouchableOpacity
 } from 'react-native';
 import { Welcome } from '../../assets';
-import { Taglines, Button, InputText } from '../../components';
+import { Taglines, Button, InputText, CStatusBar } from '../../components';
 import { BaseStyle } from '../../config/styles';
 import { themeColors } from '../../config/theme';
 import { AUTH, COMMON } from '../../navigation/ROUTES';
+import EncryptedStorage from 'react-native-encrypted-storage';
 
 const Login = ({ navigation }) => {
 
 
     const { width, height } = useWindowDimensions();
+    //////////////////////////////////////////////////////////////////////
+    //                      Use State
+    //////////////////////////////////////////////////////////////////////
+
+
+    //////////////////////////////////////////////////////////////////////
+    //                      Functions
+    //////////////////////////////////////////////////////////////////////
+    const getToken = async () => {
+        try {
+            const session = await EncryptedStorage.getItem("user_session");
+            if (session) {
+                tokensObj = JSON.parse(session);
+                console.log("Session: ", tokensObj.rToken);
+            }
+        } catch (error) {
+            console.log("Error in getting token: ", error)
+
+        }
+    }
+
+    //////////////////////////////////////////////////////////////////
+
+    const getData = async () => {
+        try {
+            const session = await EncryptedStorage.getItem("user_session");
+            if (session) {
+                tokensObj = JSON.parse(session);
+                console.log("Session: ", tokensObj);
+            }
+        } catch (error) {
+            console.log("Error in getting token: ", error)
+
+        }
+    }
+
+    //////////////////////////////////////////////////////////////////
+    const storeData = async (data1 = 12, data2 = 24) => {
+        try {
+            await EncryptedStorage.setItem("data",
+                JSON.stringify({
+                    data1,
+                    data2
+
+                }));
+            console.log("data stored successfully")
+        } catch (error) {
+            console.log("Error in storing data: ", error)
+        }
+
+    }
+    const storeIt = async () => {
+        storeData("adf", "asd");
+
+    }
+
+
+    //////////////////////////////////////////////////////////////////////
+    //                      api calls
+    //////////////////////////////////////////////////////////////////////
 
     return (
         <>
-            <StatusBar
-                translucent
-                backgroundColor="transparent"
-                barStyle="dark-content"
-            />
+
+            <CStatusBar />
 
 
             <View
@@ -65,10 +123,10 @@ const Login = ({ navigation }) => {
                 <TouchableOpacity onPress={() => navigation.navigate(AUTH.LOGIN)} style={{ marginTop: 16 }}>
                     <Text style={[BaseStyle.text, { color: themeColors.appPrimary(1), marginLeft: 4, fontFamily: 'Poppins-Bold' }]}>Forgot Password</Text>
                 </TouchableOpacity>
-                <Button title={'Log In'} mt={36} onpress={() => navigation.navigate(AUTH.SIGNUP)} />
+                <Button title={'Log In'} mt={36} onpress={() => navigation.navigate(COMMON.HOME)} />
                 <View style={{ flexDirection: 'row', marginTop: 8 }}>
                     <Text style={BaseStyle.text}> Don't have an account? </Text>
-                    <TouchableOpacity onPress={() => navigation.navigate(AUTH.LOGIN)}>
+                    <TouchableOpacity onPress={() => navigation.navigate(AUTH.SIGNUP)}>
                         <Text style={[BaseStyle.text, { color: themeColors.appPrimary(1), marginLeft: 4, fontFamily: 'Poppins-Bold' }]}>Sign Up</Text>
                     </TouchableOpacity>
 
